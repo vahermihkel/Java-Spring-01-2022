@@ -1,7 +1,7 @@
 package ee.mihkel.character;
 
 // encapsulation - kapseldus
-public class Character {
+public abstract class Character {
     protected int xCoord;
     protected int yCoord;
     protected char symbol;

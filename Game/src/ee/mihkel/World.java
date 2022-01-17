@@ -1,6 +1,6 @@
 package ee.mihkel;
 
-import ee.mihkel.character.Player;
+import ee.mihkel.character.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class World {
     private int height;
     private int width;
     // encapsulation == private muutujate ees
-    private List<Player> characters = new ArrayList();
+    private List<Character> characters = new ArrayList();
 
     // constructor
     public World(int height, int width) {
@@ -22,8 +22,8 @@ public class World {
 //        this.characters = characters;
 //    }
 
-    public void addCharacter(Player player) {
-        this.characters.add(player);
+    public void addCharacter(Character character) {
+        this.characters.add(character);
     }
 
     //    // constructor overloading
@@ -41,16 +41,16 @@ public class World {
         char symbol; // declaration 1x . siin luuakse mälukoht sellele muutujale
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (x == 0 || x == width-1) {
+                if (x == 0 || x == width - 1) {
                     symbol = '|';
-                } else if (y == 0 || y == height-1) {
+                } else if (y == 0 || y == height - 1) {
                     symbol = '-';
                 } else {
                     symbol = ' ';
                 }
-                for (Player character: characters) {
-                    if (character.getyCoord() == y && character.getxCoord() == x) {
-                        symbol = character.getSymbol();
+                for (Character c : characters) {
+                    if (c.getyCoord() == y && c.getxCoord() == x) {
+                        symbol = c.getSymbol();
                     }
                 }
 //                for (int i = 0; i < characters.size(); i++) {
