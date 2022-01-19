@@ -44,20 +44,27 @@ public class Main {
                     player.getyCoord() == enemy.getyCoord()) {
                 System.out.println("Kohtusid vaenlasega!");
                 System.out.println("Võitlemiseks ütle üks number 1-3");
-                int randomNumber = (int) (Math.random()*3)+1; // double muutmine int (cast)
-                int playerNumber = 0; // String muutmine int (parse)
-                // ctrl + alt + t -- try-catch
-                while (playerNumber < 1 || playerNumber > 3) {
-                    try {
-                        playerNumber = Integer.parseInt(scanner.nextLine());
-                        if (randomNumber == playerNumber) {
-                            player.takeHealth();
-                        } else if (playerNumber >= 1 && playerNumber <= 3) {
-                            enemy.takeHealth();
+                enemy.setVisible(false);
+                while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+                    int randomNumber = (int) (Math.random()*3)+1; // double muutmine int (cast)
+                    int playerNumber = 0; // String muutmine int (parse)
+                    // ctrl + alt + t -- try-catch
+                    while (playerNumber < 1 || playerNumber > 3) {
+                        try {
+                            playerNumber = Integer.parseInt(scanner.nextLine());
+                            if (randomNumber == playerNumber) {
+                                player.takeHealth();
+                            } else if (playerNumber >= 1 && playerNumber <= 3) {
+                                enemy.takeHealth();
+                            } else {
+                                throw new NumberTooSmallOrBigException();
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Sisestasid numbri asemel muu sümboli, sisesta uuesti!");
+    //                        e.printStackTrace();
+                        } catch (NumberTooSmallOrBigException e) {
+                            System.out.println("Sisestasid liiga suure või väikse numbri, sisesta uuesti!");
                         }
-                        enemy.setVisible(false);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
                     }
                 }
             }
