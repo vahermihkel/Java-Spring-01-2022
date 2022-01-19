@@ -18,7 +18,15 @@ public class World {
         this.width = width;
     }
 
-//    public void setCharacters(List characters) {
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    //    public void setCharacters(List characters) {
 //        this.characters = characters;
 //    }
 
@@ -49,7 +57,7 @@ public class World {
                     symbol = ' ';
                 }
                 for (Character c : characters) {
-                    if (c.getyCoord() == y && c.getxCoord() == x) {
+                    if (c.getyCoord() == y && c.getxCoord() == x && c.isVisible()) {
                         symbol = c.getSymbol();
                     }
                 }
