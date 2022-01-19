@@ -11,8 +11,8 @@ public class Main {
 
     // throw new exception
     // custom exception
-    // hashmap
     // util class
+    // hashmap
     // static
     // streamid
     // interfaces
@@ -29,12 +29,16 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
 
-        while (!input.equals("end")) {
-            player.move(input, world);
-            GameUtil.checkIfPlayerAndEnemyMet(player, enemy, scanner);
-            GameUtil.checkIfPlayerAndQuestmasterMet(player, enemy, questMaster);
-            world.printMap();
-            input = scanner.nextLine();
+        try {
+            while (!input.equals("end")) {
+                player.move(input, world);
+                GameUtil.checkIfPlayerAndEnemyMet(player, enemy, scanner);
+                GameUtil.checkIfPlayerAndQuestmasterMet(player, enemy, questMaster);
+                world.printMap();
+                input = scanner.nextLine();
+            }
+        } catch (GameOverException e) {
+            System.out.println("Mäng läbi!");
         }
     }
 }
