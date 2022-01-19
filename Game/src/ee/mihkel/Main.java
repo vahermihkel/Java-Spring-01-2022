@@ -45,14 +45,21 @@ public class Main {
                 System.out.println("Kohtusid vaenlasega!");
                 System.out.println("Võitlemiseks ütle üks number 1-3");
                 int randomNumber = (int) (Math.random()*3)+1; // double muutmine int (cast)
-                int playerNumber = Integer.parseInt(scanner.nextLine()); // String muutmine int (parse)
-                if (randomNumber == playerNumber) {
-                   player.takeHealth();
-                } else {
-                   enemy.takeHealth();
+                int playerNumber = 0; // String muutmine int (parse)
+                // ctrl + alt + t -- try-catch
+                while (playerNumber < 1 || playerNumber > 3) {
+                    try {
+                        playerNumber = Integer.parseInt(scanner.nextLine());
+                        if (randomNumber == playerNumber) {
+                            player.takeHealth();
+                        } else if (playerNumber >= 1 && playerNumber <= 3) {
+                            enemy.takeHealth();
+                        }
+                        enemy.setVisible(false);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
-                //11.40
-                enemy.setVisible(false);
             }
             if (player.getxCoord() == questMaster.getxCoord() &&
                     player.getyCoord() == questMaster.getyCoord()) {
