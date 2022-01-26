@@ -1,15 +1,15 @@
 package ee.mihkel.character;
 
+import ee.mihkel.World;
+
 public class Enemy extends Character {
     private EnemyType enemyType;
 
     // List = [Ant, Horse]
     // HashMap = [{Ant: 2}, {Horse: 1}]
 
-    public Enemy() {
-        this.xCoord = 2;
-        this.yCoord = 2;
-        this.symbol = 'Z';
+    public Enemy(World world) {
+        super(world, 'Z');
         this.enemyType = EnemyType.getRandomEnemyType();
     }
 
@@ -19,5 +19,13 @@ public class Enemy extends Character {
 
     public void randomiseEnemyType() {
         this.enemyType = EnemyType.getRandomEnemyType();
+        // läheb annab elud erinevalt vastavalt EnemyType
+        // getEnemyHealthByType()
     }
+
+    // private void getEnemyHealthByType()
+    // switch case
+    // ANT: elud 1
+    // ELEPHANT: elud 6
+
 }

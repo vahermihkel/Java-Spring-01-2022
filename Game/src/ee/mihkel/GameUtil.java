@@ -7,9 +7,11 @@ import ee.mihkel.character.QuestMaster;
 import java.util.Scanner;
 
 public class GameUtil {
-    protected static void checkIfPlayerAndQuestmasterMet(Player player, Enemy enemy, QuestMaster questMaster) {
+    protected static void checkIfPlayerAndQuestmasterMet(Player player,
+                               Enemy enemy, QuestMaster questMaster, World world) {
         if (player.getxCoord() == questMaster.getxCoord() &&
                 player.getyCoord() == questMaster.getyCoord()) {
+            enemy.randomiseCoordinates(world);
             enemy.setVisible(true);
             enemy.randomiseEnemyType();
         }
@@ -26,7 +28,7 @@ public class GameUtil {
                 fightWithEnemy(player, enemy, scanner);
             }
             if (enemy.getHealth() == 0) {
-
+                player.addToKilledEnemies(enemy.getEnemyType());
             } else if (player.getHealth() == 0) {
                 throw new GameOverException(); // kui on throw new, siis peab olema kuskil ka catch
             }

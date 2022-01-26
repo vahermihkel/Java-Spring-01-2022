@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private int height;
-    private int width;
+    private final int height;
+    private final int width;
     // encapsulation == private muutujate ees
-    private List<Character> characters = new ArrayList();
+    private final List<Character> characters = new ArrayList<>();
 
     // constructor
     public World(int height, int width) {
@@ -32,6 +32,10 @@ public class World {
 
     public void addCharacter(Character character) {
         this.characters.add(character);
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
     }
 
     //    // constructor overloading

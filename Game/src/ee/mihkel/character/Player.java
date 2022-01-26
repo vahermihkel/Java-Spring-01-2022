@@ -10,21 +10,25 @@ import java.util.Map;
 // child saab kõik omadused parent seest
 public class Player extends Character {
     private Direction direction;
-    private Map<EnemyType, Integer> killedEnemies = new HashMap<>();
+    private final Map<EnemyType, Integer> killedEnemies = new HashMap<>();
 
-    public Player() {
-        this.xCoord = 3;
-        this.yCoord = 3;
-        this.symbol = 'X';
+    public Player(World world) {
+        super(world, 'X');
         this.direction = Direction.UP;
     }
 
     public void showKilledEnemies() {
         // kuva välja sout abil kõik tapetud vaenlased
         // kutsu see funktsioon välja kui mäng on läbi (catch GameOverException sees)
+        killedEnemies.forEach((key,value) -> System.out.println(key + ": " + value));
     }
 
     public void addToKilledEnemies(EnemyType enemyType) {
+        if (killedEnemies.containsKey(enemyType)) {
+            killedEnemies.put(enemyType, killedEnemies.get(enemyType)+1);
+        } else {
+            killedEnemies.put(enemyType, 1);
+        }
         // lisa ülemisele HashMapile uus tapetud EnemyType
         // KUI on olemas, siis suurenda Integeri ühe võrra
         // KUI ei ole olemas, siis lisa uus EnemyType ja talle tapetud numbri väärtus 1

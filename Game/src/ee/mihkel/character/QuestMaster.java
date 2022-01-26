@@ -1,10 +1,10 @@
 package ee.mihkel.character;
 
+import ee.mihkel.World;
+
 public class QuestMaster extends Character {
 
-    public QuestMaster() {
-        this.xCoord = 5;
-        this.yCoord = 2;
-        this.symbol = 'Q';
+    public QuestMaster(World world) {
+        super(world, 'Q');
     }
 }
