@@ -1,5 +1,8 @@
-package ee.mihkel.webshop;
+package ee.mihkel.webshop.controller;
 
+import ee.mihkel.webshop.model.entity.Product;
+import ee.mihkel.webshop.repository.ProductRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,6 +11,7 @@ import java.util.List;
 // Annoteerime RestController, et oleks koguaeg olemas
 // Controller peab olema koguaeg olemas päringute valmiduse osas
 @RestController
+@Log4j2
 //@RequestMapping("/api")
 public class ProductController {
 
@@ -17,6 +21,10 @@ public class ProductController {
 
     @GetMapping("products")
     public List<Product> getProducts() {
+        System.out.println("VÕETI KÕIK TOOTED");
+        log.info("VÕETI KÕIK TOOTED");
+        log.debug("VÕETI KÕIK TOOTED");
+        log.error("VÕETI KÕIK TOOTED");
         return productRepository.findAll();
     }
     // GET - võtmiseks

@@ -1,5 +1,6 @@
-package ee.mihkel.webshop;
+package ee.mihkel.webshop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class MockController {
     List<String> strings = new ArrayList<>(Arrays.asList("Üks", "Kaks"));
 
     // GET localhost:8080/strings
+    @Operation(summary = "Kõikide stringide võtmiseks")
     @GetMapping("strings")
     public List<String> getStrings() {
         return strings;
