@@ -47,7 +47,7 @@ public class PaymentController {
         everyPayData.setAccount_name(everyPayAccountname);
         everyPayData.setAmount(300);
         everyPayData.setOrder_reference(4321L);
-        everyPayData.setTimestamp(timeStamp);
+        everyPayData.setTimestamp(timeStamp.toString());
         everyPayData.setNonce(everyPayUsername + 4321L + timeStamp);
         everyPayData.setCustomer_url(customerurl);
 

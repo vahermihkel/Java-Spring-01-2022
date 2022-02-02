@@ -12,7 +12,7 @@ public class EveryPayData {
     private String account_name;
     private double amount;
     private Long order_reference;
-    private ZonedDateTime timestamp;
+    private String timestamp;
     private String nonce;
     private String customer_url;
 }
