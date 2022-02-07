@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 // Annoteerime RestController, et oleks koguaeg olemas
 // Controller peab olema koguaeg olemas päringute valmiduse osas
 @RestController
 @Log4j2
 //@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     @Autowired
@@ -56,6 +59,19 @@ public class ProductController {
     public String editProduct(@PathVariable Long id, @RequestBody Product product) {
         productRepository.save(product);
         return "Edukalt muudetud toode id-ga: " + id;
+    }
+
+    // Optional<Product> -- null on öeldud et on ka korrektne
+
+    // Product product = null;
+    //        if (productRepository.findById(id).isPresent()) {
+    //            product = productRepository.findById(id).get();
+    //        }
+    @GetMapping("products/{id}")
+    public Product viewProduct(@PathVariable Long id) {
+        Product product = productRepository.findById(id).get();
+        System.out.println(product);
+        return product;
     }
 }
 
