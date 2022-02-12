@@ -44,16 +44,16 @@ public class ProductController {
     }
 
     @DeleteMapping("products/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    public List<Product> deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
-        return "Edukalt kustutatud toode id-ga:" + id;
+        return productRepository.findAll();
     }
 
-    @DeleteMapping("products")
-    public String deleteAllProducts() {
-        productRepository.flush();
-        return "Edukalt kustutatud kõik tooted" ;
-    }
+//    @DeleteMapping("products")
+//    public String deleteAllProducts() {
+//        productRepository.flush();
+//        return "Edukalt kustutatud kõik tooted" ;
+//    }
 
     @PutMapping("products/{id}")
     public String editProduct(@PathVariable Long id, @RequestBody Product product) {
@@ -72,6 +72,12 @@ public class ProductController {
         Product product = productRepository.findById(id).get();
         System.out.println(product);
         return product;
+    }
+
+    @PutMapping("products")
+    public String addAllProducts(@RequestBody List<Product> products) {
+        productRepository.saveAll(products);
+        return "Edukalt kõik tooted lisatud andmebaasi";
     }
 }
 

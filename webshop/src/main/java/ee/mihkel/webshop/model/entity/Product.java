@@ -23,7 +23,11 @@ public class Product {
     private String name;
     private double price;
     private int quantity;
-    private String store;
+    private String imgSrc;
+    private boolean isActive;
+    private String category;
+    private String description;
+    private long barcode;
 }
 
 // Product 1,2,3,4
