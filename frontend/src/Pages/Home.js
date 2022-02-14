@@ -46,7 +46,7 @@ function Home() {
         <Button onClick={sortPriceAsc}>{t("home.sort-price-asc")}</Button>
         <Button onClick={sortPriceDesc}>{t("home.sort-price-desc")}</Button>
         </div>}
-        {products.map(product => {product.quantity > 0 && <Product key={product.id} prod={product} />})}
+        {products.map(product => {return product.quantity > 0 && <Product key={product.id} prod={product} />})}
     </div>)
 }
 

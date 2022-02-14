@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+// sõnade otsimiseks:  ctrl + shift + f
+// failide otsimiseks: shift + shift - 2x shift
+
 // Annoteerime RestController, et oleks koguaeg olemas
 // Controller peab olema koguaeg olemas päringute valmiduse osas
 @RestController
@@ -24,11 +27,7 @@ public class ProductController {
 
     @GetMapping("products")
     public List<Product> getProducts() {
-        System.out.println("VÕETI KÕIK TOOTED");
-        log.info("VÕETI KÕIK TOOTED");
-        log.debug("VÕETI KÕIK TOOTED");
-        log.error("VÕETI KÕIK TOOTED");
-        return productRepository.findAll();
+        return productRepository.findByOrderByIdAsc();
     }
     // GET - võtmiseks
     // POST - lõppu juurde lisamiseks
@@ -79,7 +78,39 @@ public class ProductController {
         productRepository.saveAll(products);
         return "Edukalt kõik tooted lisatud andmebaasi";
     }
-}
 
-// E 10:00-13:00
-// R 14:00-17:00
+    // Patch on ühe või mitme omaduse muutmine
+    @PatchMapping("increase-quantity")
+    public String increaseProductQuantity(@RequestBody Product product) {
+        // kas läheb muutma või lisama, käib ID alusel
+        // kui .save sees antakse selline objekt, kelle ID on juba olemas
+        //              siis selle IDga kõik andmed muudetakse
+        // kui ID-d kaasa ei anta VÕI on selline ID mida ei ole olemas
+        //              siis lisatakse
+        if (productRepository.findById(product.getId()).isPresent()) {
+            int productQuantity = product.getQuantity();
+            product.setQuantity(++productQuantity);
+            productRepository.save(product);
+            return "Edukalt toote kogus suurendatud";
+        } else {
+            return "Toodet mille kogust taheti muuta ei leitud";
+        }
+
+    }
+
+    @PatchMapping("decrease-quantity")
+    public String decreaseProductQuantity(@RequestBody Product product) {
+        if (productRepository.findById(product.getId()).isPresent() &&
+                product.getQuantity() > 0) {
+            int productQuantity = product.getQuantity();
+            product.setQuantity(--productQuantity);
+            productRepository.save(product);
+            return "Edukalt toote kogus vähendatud";
+        } else if (product.getQuantity() < 1) {
+           return "Tootel mille kogust taheti vähendada on kogus liiga väike";
+        } else {
+            return "Toodet mille kogust taheti muuta ei leitud";
+        }
+
+    }
+}

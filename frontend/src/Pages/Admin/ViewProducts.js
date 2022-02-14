@@ -45,6 +45,60 @@ function ViewProducts() {
         });
     }
 
+    function onIncreaseQuantity(product) {
+        fetch("http://localhost:8080/increase-quantity",{
+            method: "PATCH",
+            body: JSON.stringify(product),
+            headers: {
+                "Content-Type":"application/json"
+            }
+        }).then(res=> {
+            if (res.status === 200) {
+                fetch("http://localhost:8080/products")
+                .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
+                .then(data => {
+                    updateProducts(data)
+                    updateOriginalProducts(data);
+                }); // body
+            } 
+        })
+
+        // .then(res=> {
+        //     if (res.status == 200) {
+        //         const index = products.indexOf(product);
+        //         product.quantity++;
+        //         products[index] = product;
+        //         updateProducts(products.slice()); // slice on mälukoha katkestamine
+        //         updateOriginalProducts(products.slice()); // slice abil on täiesti uus muutuja
+                                                    // millel on samad väärtused
+        //             üleval olev kuju: const [products, updateProducts] = useState([]);
+        //     } 
+        // })
+    }
+
+
+
+    function onDecreaseQuantity(product) {
+        if (product.quantity > 0) {
+            fetch("http://localhost:8080/decrease-quantity",{
+                method: "PATCH",
+                body: JSON.stringify(product),
+                headers: {
+                    "Content-Type":"application/json"
+                }
+            }).then(res=> {
+                if (res.status === 200) {
+                    fetch("http://localhost:8080/products")
+                    .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
+                    .then(data => {
+                        updateProducts(data)
+                        updateOriginalProducts(data);
+                    }); // body
+                } 
+            })
+        }
+    }
+
     return (<div>
         <h2 className="mb-4">Products</h2>
         <input onKeyUp={searchProduct} ref={searchRef} type="text" />
@@ -69,8 +123,8 @@ function ViewProducts() {
           <Link to={"/admin/muuda/" + product.id}>
             <Button variant="warning">Edit</Button>
           </Link>
-          <Button variant="success">Pcs ++</Button>
-          <Button>Pcs --</Button>
+          <Button onClick={() => onIncreaseQuantity(product)} variant="success">Pcs ++</Button>
+          <Button hidden={product.quantity < 1} onClick={() => onDecreaseQuantity(product)}>Pcs --</Button>
       </td>
     </tr>)}
 
@@ -98,3 +152,5 @@ function ViewProducts() {
 }
 
 export default ViewProducts;
+
+// 11:35

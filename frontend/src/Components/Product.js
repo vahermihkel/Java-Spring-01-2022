@@ -12,7 +12,7 @@ function Product(props) {
         let products = [];
         if (sessionStorage.getItem("cartItems")) {
             products = JSON.parse(sessionStorage.getItem("cartItems"));
-            const index = products.findIndex(prod => prod.cartProduct.code === product.code);
+            const index = products.findIndex(prod => prod.cartProduct.id === product.id);
             if (index === -1) {
                 products.push({cartProduct: product, quantity: 1});
             } else {
