@@ -4,6 +4,8 @@ import ee.mihkel.webshop.model.entity.Product;
 import ee.mihkel.webshop.repository.ProductRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +28,15 @@ public class ProductController {
     // ProductRepository productRepository = new ProductRepository();
 
     @GetMapping("products")
-    public List<Product> getProducts() {
-        return productRepository.findByOrderByIdAsc();
+    public ResponseEntity<List<Product>> getProducts() {
+        return ResponseEntity.ok()
+//              .headers(responseHeaders)
+                .body(productRepository.findByOrderByIdAsc());
+
+
+//        new ResponseEntity<>(productRepository.findByOrderByIdAsc(),
+//                responseHeaders,
+//                HttpStatus.OK);
     }
     // GET - võtmiseks
     // POST - lõppu juurde lisamiseks
@@ -37,15 +46,22 @@ public class ProductController {
     // DELETE - kustutamiseks
 
     @PostMapping("products")
-    public String addProduct(@RequestBody Product product) {
+    public ResponseEntity<String> addProduct(@RequestBody Product product) {
         productRepository.save(product);
-        return "Edukalt lisatud uus toode: " + product.getName();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Edukalt lisatud uus toode: " + product.getName());
+
+
+//        new ResponseEntity<>("Edukalt lisatud uus toode: " + product.getName(),
+//  //              responseHeaders,
+//                HttpStatus.CREATED);
     }
 
     @DeleteMapping("products/{id}")
-    public List<Product> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<List<Product>> deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
-        return productRepository.findAll();
+        return ResponseEntity.ok()
+                .body(productRepository.findByOrderByIdAsc());
     }
 
 //    @DeleteMapping("products")
@@ -55,9 +71,10 @@ public class ProductController {
 //    }
 
     @PutMapping("products/{id}")
-    public String editProduct(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<String> editProduct(@PathVariable Long id, @RequestBody Product product) {
         productRepository.save(product);
-        return "Edukalt muudetud toode id-ga: " + id;
+        return ResponseEntity.ok()
+                .body("Edukalt muudetud toode id-ga: " + id);
     }
 
     // Optional<Product> -- null on öeldud et on ka korrektne
@@ -67,21 +84,21 @@ public class ProductController {
     //            product = productRepository.findById(id).get();
     //        }
     @GetMapping("products/{id}")
-    public Product viewProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id).get();
-        System.out.println(product);
-        return product;
+    public ResponseEntity<Product> viewProduct(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(productRepository.findById(id).get());
     }
 
     @PutMapping("products")
-    public String addAllProducts(@RequestBody List<Product> products) {
+    public ResponseEntity<String> addAllProducts(@RequestBody List<Product> products) {
         productRepository.saveAll(products);
-        return "Edukalt kõik tooted lisatud andmebaasi";
+        return ResponseEntity.ok()
+                .body("Edukalt kõik tooted lisatud andmebaasi");
     }
 
     // Patch on ühe või mitme omaduse muutmine
     @PatchMapping("increase-quantity")
-    public String increaseProductQuantity(@RequestBody Product product) {
+    public ResponseEntity<String> increaseProductQuantity(@RequestBody Product product) {
         // kas läheb muutma või lisama, käib ID alusel
         // kui .save sees antakse selline objekt, kelle ID on juba olemas
         //              siis selle IDga kõik andmed muudetakse
@@ -91,25 +108,29 @@ public class ProductController {
             int productQuantity = product.getQuantity();
             product.setQuantity(++productQuantity);
             productRepository.save(product);
-            return "Edukalt toote kogus suurendatud";
+            return ResponseEntity.ok()
+                    .body("Edukalt toote kogus suurendatud");
         } else {
-            return "Toodet mille kogust taheti muuta ei leitud";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Toodet mille kogust taheti muuta ei leitud");
         }
-
     }
 
     @PatchMapping("decrease-quantity")
-    public String decreaseProductQuantity(@RequestBody Product product) {
+    public ResponseEntity<String> decreaseProductQuantity(@RequestBody Product product) {
         if (productRepository.findById(product.getId()).isPresent() &&
                 product.getQuantity() > 0) {
             int productQuantity = product.getQuantity();
             product.setQuantity(--productQuantity);
             productRepository.save(product);
-            return "Edukalt toote kogus vähendatud";
+            return ResponseEntity.ok()
+                    .body("Edukalt toote kogus vähendatud");
         } else if (product.getQuantity() < 1) {
-           return "Tootel mille kogust taheti vähendada on kogus liiga väike";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Tootel mille kogust taheti vähendada on kogus liiga väike");
         } else {
-            return "Toodet mille kogust taheti muuta ei leitud";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Toodet mille kogust taheti muuta ei leitud");
         }
 
     }

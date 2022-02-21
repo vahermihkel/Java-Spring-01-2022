@@ -4,6 +4,7 @@ import ee.mihkel.webshop.model.entity.Product;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
 import ee.mihkel.webshop.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,14 +19,15 @@ public class PaymentController {
     PaymentService paymentService;
 
     @PostMapping("payment")
-    public EveryPayLink getPaymentLink(@RequestBody List<Product> products) {
+    public ResponseEntity<EveryPayLink> getPaymentLink(@RequestBody List<Product> products) {
 
         List<Product> productsFromDb = paymentService.getProductsFromDb(products);
         double orderSum = paymentService.getOrderSum(productsFromDb);
 
         Long orderId = paymentService.saveOrderToDb(orderSum,productsFromDb);
 
-        return paymentService.getPaymentLinkFromEveryPay(orderSum,orderId);
+        return ResponseEntity.ok()
+                .body(paymentService.getPaymentLinkFromEveryPay(orderSum,orderId));
     }
 
     // Bean abil funktsiooni

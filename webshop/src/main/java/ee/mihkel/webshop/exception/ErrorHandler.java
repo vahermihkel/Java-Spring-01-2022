@@ -63,7 +63,21 @@ public class ErrorHandler {
 //        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 //    }
 
+    // Kasutaja entity
+    // Siduma temaga tellimus
+    // Selle kasutaja tellimused---
+    // Order WHERE isik, JOIN isik, JOIN product
+    // 15 minutilise Cache
+
+    // Cache -- Google Guava -- järgmine kord
+
+    // Mockito
+    // Unit Testid
+
     // Spring Security
     // JSON Web Token
+
+    // Smart ID
+    // Mobiil ID
 
 }
