@@ -97,3 +97,9 @@
 .table.table-hover.table-bordered {
     width: 50%;
 }
+
+.alert {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}

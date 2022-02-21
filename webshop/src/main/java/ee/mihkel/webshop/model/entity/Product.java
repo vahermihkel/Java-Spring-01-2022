@@ -39,7 +39,32 @@ public class Product {
 
     @NotNull
     @NotBlank
+   // @OneToOne
     private String category;
+
+//    private Category category;
+//      entity -> new Class -> Category
+//    Long id;
+    // String name;
+    // Repositoy
+    // Controller, kus saab lisada, muuta, kustutada, kõiki võtta
+    // (kategooriad frontendis dropdownist)
+    // --- mina teen nkn, aga ilma fetchita
+
+//    entity -> new Class -> Person
+    // Long id;
+    // String firstName; // NotNull ja NotBlank
+    // String lastName; // NotNull ja NotBlank
+    //@Column(unique = true) -- ainult siis kui tabelit ei ole tehtud
+    // String email;
+    // String phone; --- võib olla null
+    // String personCode;
+    // Repository
+    // Controller, kus saab lisada, muuta, kustutada, kõiki võtta
+
+
+    // Vähendama nende toodete kogust Backendis kui tellimus on edukas
+
 
     @NotNull
     @NotBlank // mitte "null", mitte "", mitte " "

@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import NavigationBar from './Components/NavigationBar';
 import Home from './Pages/Home';

@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+// import Alert from "react-bootstrap/Alert";
+import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from "react-i18next";
 
 function AddProduct() {
@@ -12,7 +14,9 @@ function AddProduct() {
     const descriptionRef = useRef();
     const barcodeRef = useRef();
     const { t } = useTranslation();
-    const [message, setMessage] = useState("");
+    // const [message, setMessage] = useState("");
+    // const [warningMessage, setWarningMessage] = useState("");
+    // const [errorMessage, setErrorMessage] = useState("");
 
     function addToDatabase() {
         const newProduct = {
@@ -34,7 +38,9 @@ function AddProduct() {
         }).then(res => {
             console.log(res);
             if (res.status === 201) {
-                setMessage("Toode edukalt lisatud!");
+                // setMessage("Toode edukalt lisatud!");
+                // setErrorMessage("");
+                toast.success("Toode edukalt lisatud!");
             } else {
                 return res.json(); 
             }
@@ -45,13 +51,20 @@ function AddProduct() {
             // } else if (data.message === "Kõik nõutud väljad on täitmata") {
             //     setMessage(data.message);
             // }
-            setMessage(data.message);
+            // setMessage("");
+            // setErrorMessage(data.message);
+            toast.error(data.message);
         }) // body
     }
 
-    return (
+    return ( // "Sõnum" ---> {message: "Sõnum", type: "warning"} className={message.type === "warning" ? "sad" : "" }
     <div>
-        <div>{message}</div>
+        <ToastContainer />
+        {/* {message && <Alert variant="success">{message}</Alert>}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>} */}
+        {/* <div className="successful-message">{message}</div> */}
+        {/* <div>{warningMessage}</div> */}
+        {/* <div className="error-message">{errorMessage}</div> */}
         <Form.Label>{t("product.name")}</Form.Label> <br />
         <Form.Control placeholder={t("product.product-name")} ref={nameRef} /> <br />
         <Form.Label>{t("product.price")}</Form.Label> <br />
