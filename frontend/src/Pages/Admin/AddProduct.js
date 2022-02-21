@@ -12,7 +12,7 @@ function AddProduct() {
     const descriptionRef = useRef();
     const barcodeRef = useRef();
     const { t } = useTranslation();
-    const [errorMessage, setErrorMessage] = useState("");
+    const [message, setMessage] = useState("");
 
     function addToDatabase() {
         const newProduct = {
@@ -31,11 +31,27 @@ function AddProduct() {
             headers: {
                 "Content-Type":"application/json"
             }
-        })
+        }).then(res => {
+            console.log(res);
+            if (res.status === 201) {
+                setMessage("Toode edukalt lisatud!");
+            } else {
+                return res.json(); 
+            }
+        }) // responseEntity
+        .then(data => {
+            // if (data.message === "Mitteunikaalne ribakood") {
+            //     setMessage("Lisatavale tootele pandi mitteunikaalne ribakood");
+            // } else if (data.message === "Kõik nõutud väljad on täitmata") {
+            //     setMessage(data.message);
+            // }
+            setMessage(data.message);
+        }) // body
     }
 
     return (
     <div>
+        <div>{message}</div>
         <Form.Label>{t("product.name")}</Form.Label> <br />
         <Form.Control placeholder={t("product.product-name")} ref={nameRef} /> <br />
         <Form.Label>{t("product.price")}</Form.Label> <br />

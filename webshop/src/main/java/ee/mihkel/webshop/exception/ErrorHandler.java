@@ -48,7 +48,7 @@ public class ErrorHandler {
     @ExceptionHandler()
     public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException e) {
         ErrorResponse response = new ErrorResponse();
-        response.setMessage("Mitteunikaalne ribakood");
+        response.setMessage("Kõik nõutud väljad on täitmata");
         response.setTimeStamp(new Date());
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
