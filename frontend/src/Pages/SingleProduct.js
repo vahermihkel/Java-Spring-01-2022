@@ -11,9 +11,13 @@ function SingleProduct() {
 
     useEffect(()=>{
         fetch("http://localhost:8080/products/" + id)
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 200) {
+                return res.json()
+            }
+        })
         .then(data => updateProduct(data));
-    },[]);
+    },[id]);
 
     return (
         <div>      

@@ -19,12 +19,16 @@ function EditProduct() {
     const activeRef = useRef();
     const { t } = useTranslation();
     const [product, updateProduct] = useState(null);
+    // const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(()=>{
         fetch("http://localhost:8080/products/" + id)
-        .then(res => res.json())
-        .then(data => updateProduct(data));
-    },[]);
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        }).then(data => updateProduct(data));
+    },[id]);
 
     // !!! ID on vaja ka kaasa saata
     function onEditProduct() {
@@ -37,7 +41,7 @@ function EditProduct() {
             description: descriptionRef.current.value,
             barcode: barcodeRef.current.value,
             quantity: quantityRef.current.value,
-            isActive: activeRef.current.value
+            active: activeRef.current.value
         }
         fetch("http://localhost:8080/products/" + product.id,{
             method: "PUT",

@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 // Annotation
 @Getter
@@ -20,13 +19,34 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @NotBlank
     private String name;
+
+    @NotNull
     private double price;
+
+    @NotNull
     private int quantity;
+
+    @NotNull
+    @NotBlank
     private String imgSrc;
-    private boolean isActive;
+
+    @NotNull
+    private boolean active;
+
+    @NotNull
+    @NotBlank
     private String category;
+
+    @NotNull
+    @NotBlank // mitte "null", mitte "", mitte " "
     private String description;
+
+    @NotNull // mitte "null"
+    //@Column(unique = true) -- ainult siis kui tabelit ei ole tehtud
     private long barcode;
 }
 

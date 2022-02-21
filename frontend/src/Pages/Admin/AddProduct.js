@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -12,6 +12,7 @@ function AddProduct() {
     const descriptionRef = useRef();
     const barcodeRef = useRef();
     const { t } = useTranslation();
+    const [errorMessage, setErrorMessage] = useState("");
 
     function addToDatabase() {
         const newProduct = {
@@ -22,7 +23,7 @@ function AddProduct() {
             description: descriptionRef.current.value,
             barcode: barcodeRef.current.value,
             quantity: 0,
-            isActive: false
+            active: false
         }
         fetch("http://localhost:8080/products",{
             method: "POST",
