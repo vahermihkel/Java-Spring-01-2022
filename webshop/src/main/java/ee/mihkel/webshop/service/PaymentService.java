@@ -2,11 +2,16 @@ package ee.mihkel.webshop.service;
 
 import ee.mihkel.webshop.model.entity.Order;
 import ee.mihkel.webshop.model.entity.Product;
+import ee.mihkel.webshop.model.request.input.CartProduct;
+import ee.mihkel.webshop.model.request.input.EveryPayCheckResponse;
 import ee.mihkel.webshop.model.request.input.EveryPayResponse;
+import ee.mihkel.webshop.model.request.input.PaymentState;
 import ee.mihkel.webshop.model.request.output.EveryPayData;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
+import ee.mihkel.webshop.model.request.output.EveryPayPaymentCheck;
 import ee.mihkel.webshop.repository.OrderRepository;
 import ee.mihkel.webshop.repository.ProductRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class PaymentService {
 
@@ -59,9 +65,10 @@ public class PaymentService {
     // .map() --> // [Product{price: 2.0}, Product{price: 3.0}]
 
 
-    public List<Product> getProductsFromDb(List<Product> products) {
+    public List<Product> getProductsFromDb(List<CartProduct> products) {
+        log.info(products.get(0).getCartProduct().getId());
         return products.stream() // avab streami
-                .map(e -> productRepository.findById(e.getId()).get()) // muutmine - map() abil
+                .map(e -> productRepository.findById(e.getCartProduct().getId()).get()) // muutmine - map() abil
                 .collect(Collectors.toList()); // iga Stream peab omama lõpptulemist (tagastab Listi, summeerimise, average, true/false)
 
     }
@@ -98,7 +105,7 @@ public class PaymentService {
         // 1000x - @dad32wewqe
 //        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<EveryPayResponse> response =
-                restTemplate.exchange(everyPayUrl, HttpMethod.POST,httpEntity, EveryPayResponse.class);
+                restTemplate.exchange(everyPayUrl + "oneoff", HttpMethod.POST,httpEntity, EveryPayResponse.class);
 
         // { payment_link: null }
         EveryPayLink link = new EveryPayLink();
@@ -124,6 +131,27 @@ public class PaymentService {
         return everyPayData;
     }
 
+    public Boolean checkIfOrderPaid(EveryPayPaymentCheck everyPayPaymentCheck) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", authorization);
+        HttpEntity<EveryPayData> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<EveryPayCheckResponse> response =
+                restTemplate.exchange(
+                        everyPayUrl + everyPayPaymentCheck.getPayment_reference() + "?api_username=" + everyPayUsername,
+                        HttpMethod.GET,httpEntity, EveryPayCheckResponse.class);
+        if (response.getBody() != null) {
+            PaymentState paymentState = response.getBody().getPayment_state();
+            if (paymentState == PaymentState.failed ||
+                    paymentState == PaymentState.abandoned ||
+                    paymentState == PaymentState.voided) {
+                return false;
+            } else if (paymentState == PaymentState.settled) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // mapToDouble
     //  [Product{price: 2.0}, Product{price: 3.0}]
     // [2.0,3.0].sum()
@@ -135,4 +163,25 @@ public class PaymentService {
 //        for (Product p: products) {
 //            sum += p.getPrice();
 //        }
+
+
+    // meid suunatakse pärast makse teostamist VÕI
+    // makse ebaõnnestumist everypay'sse saadetud lingile
+    // mihkelmihkel.heroku.app/tellimus
+
+    // sinna lingile paneb EveryPay kaasa
+    // order_reference: 120051
+    // payment_reference: asdjna12312nkejanej23n13
+
+    // mihkelmihkel.heroku.app/tellimus?order_reference=120051&payment_reference=asdjna12312nkejanej23n13
+    // localhost:3000/tellimus --- frontendis toimub kontroll, kas on olemas order_reference ja payment_reference
+    // siis tee backendi päring localhost:8080/check-payment @RequestBody - {order_reference: 120051, payment_reference: 312ads}
+    // teeme uue päringu EveryPaysse --- https://igw-demo.every-pay.com/api/v4/payments/check-payment POST 312ads
+    // TOIMUS MAKSE / EI TOIMINUD MAKSE ---
+    //
+    // 1.otsin üles orderi 120051 ja muudan ta UNPAID / PAID staatusesse
+    // 2.KUI TOIMIS, vähendan selle Producti Quantity't.
+
+    // hiljem MAKSTUD tellimuste nägemine isikupõhiselt
+    // vahemälu / cache
 }

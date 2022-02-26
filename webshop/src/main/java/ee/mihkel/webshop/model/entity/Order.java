@@ -15,12 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
+@SequenceGenerator(name="seq", initialValue=120000)
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="seq")
     private Long id;
     private Date timeStamp;
     private double sum;
+    private boolean paid;
     // Person
 
     @ManyToMany

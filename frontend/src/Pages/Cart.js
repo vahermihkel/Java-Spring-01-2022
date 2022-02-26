@@ -51,24 +51,12 @@ function Cart() {
     }
 
     function onPay() {
-        const randomNumber = Math.floor(Math.random()*899999 + 100000);
-        const everyPayData = {
-            "api_username": "92ddcfab96e34a5f",
-            "account_name": "EUR3D1",
-            "amount": calculateSumOfCart(),
-            "order_reference": randomNumber,
-            "nonce": new Date() + "92ddcfab96e34a5f" + randomNumber,
-            "timestamp": new Date(),
-            "customer_url": "https://webshop-2021.web.app/ostukorv"
-            }
-
-        fetch("https://igw-demo.every-pay.com/api/v4/payments/oneoff",
+        fetch("http://localhost:8080/payment",
             { 
                 method: "POST", 
-                body: JSON.stringify(everyPayData),
+                body: JSON.stringify(cartProducts),
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Basic OTJkZGNmYWI5NmUzNGE1Zjo4Y2QxOWU5OWU5YzJjMjA4ZWU1NjNhYmY3ZDBlNGRhZA=="
+                    "Content-Type": "application/json"
                 }
             }
         ).then(response => {

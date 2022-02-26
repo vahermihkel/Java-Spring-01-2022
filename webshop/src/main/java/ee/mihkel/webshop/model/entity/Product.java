@@ -37,10 +37,9 @@ public class Product {
     @NotNull
     private boolean active;
 
-    @NotNull
     @NotBlank
-   // @OneToOne
-    private String category;
+    @OneToOne
+    private Category category;
 
 //    private Category category;
 //      entity -> new Class -> Category

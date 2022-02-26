@@ -1,8 +1,11 @@
 package ee.mihkel.webshop.controller;
 
 import ee.mihkel.webshop.model.entity.Product;
+import ee.mihkel.webshop.model.request.input.CartProduct;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
+import ee.mihkel.webshop.model.request.output.EveryPayPaymentCheck;
 import ee.mihkel.webshop.service.PaymentService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+@Log4j2
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class PaymentController {
@@ -19,7 +23,7 @@ public class PaymentController {
     PaymentService paymentService;
 
     @PostMapping("payment")
-    public ResponseEntity<EveryPayLink> getPaymentLink(@RequestBody List<Product> products) {
+    public ResponseEntity<EveryPayLink> getPaymentLink(@RequestBody List<CartProduct> products) {
 
         List<Product> productsFromDb = paymentService.getProductsFromDb(products);
         double orderSum = paymentService.getOrderSum(productsFromDb);
@@ -28,6 +32,14 @@ public class PaymentController {
 
         return ResponseEntity.ok()
                 .body(paymentService.getPaymentLinkFromEveryPay(orderSum,orderId));
+    }
+
+    @PostMapping("check-payment")               //{order_reference: 120051, payment_reference: 312ads}
+    public ResponseEntity<Boolean> checkPayment(@RequestBody EveryPayPaymentCheck everyPayPaymentCheck) {
+        Boolean isPaid = paymentService.checkIfOrderPaid(everyPayPaymentCheck);
+
+        return ResponseEntity.ok()
+                .body(isPaid);
     }
 
     // Bean abil funktsiooni
