@@ -11,7 +11,7 @@ function Home() {
     const [products, updateProducts] = useState([]); // useState -- uuendab lehte
 
     useEffect(() => {
-        fetch("http://localhost:8080/products")
+        fetch("https://mihkeljava.herokuapp.com/products")
         .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
         .then(data => updateProducts(data)); // body
     },[]);

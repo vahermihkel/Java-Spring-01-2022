@@ -10,7 +10,7 @@ function SingleProduct() {
     const [product, updateProduct] = useState(null);
 
     useEffect(()=>{
-        fetch("http://localhost:8080/products/" + id)
+        fetch("https://mihkeljava.herokuapp.com/products/" + id)
         .then(res => {
             if (res.status === 200) {
                 return res.json()
@@ -24,7 +24,7 @@ function SingleProduct() {
             { product && <div>
                 <div>{product.name}</div>
                 <div>{product.price}</div>
-                <div>{product.category}</div>
+                <div>{product.category.name}</div>
                 <div>{product.id}</div>
             </div>}
             { !product && <div>{t("product-not-found")}</div>}

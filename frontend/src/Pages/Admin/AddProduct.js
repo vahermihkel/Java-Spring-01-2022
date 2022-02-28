@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react"; // REACTI HOOK
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -17,12 +17,22 @@ function AddProduct() {
     // const [message, setMessage] = useState("");
     // const [warningMessage, setWarningMessage] = useState("");
     // const [errorMessage, setErrorMessage] = useState("");
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/categories")
+        .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
+        .then(body => {
+            setCategories(body);
+        }); // body
+    },[]);
+
 
     function addToDatabase() {
         const newProduct = {
             name: nameRef.current.value,
             price: priceRef.current.value,
-            category: categoryRef.current.value,
+            category: {id: categoryRef.current.value},
             imgSrc: imgSrcRef.current.value,
             description: descriptionRef.current.value,
             barcode: barcodeRef.current.value,
@@ -70,7 +80,12 @@ function AddProduct() {
         <Form.Label>{t("product.price")}</Form.Label> <br />
         <Form.Control placeholder={t("product.product-price")} ref={priceRef} /> <br />
         <Form.Label>{t("product.category")}</Form.Label> <br />
-        <Form.Control placeholder={t("product.product-category")} ref={categoryRef} /> <br />
+        {/* <Form.Control placeholder={t("product.product-category")} ref={categoryRef} /> <br /> */}
+        <Form.Select ref={categoryRef}>{ // Form. <--- BootStrapist ilus kujundus  ref <-- otseühendus mingi muutujaga
+            categories.map(category => // <--- categories saime andmebaasist, andsime talle väärtust setCategories(body) - .map <--- asenda HTMLiga
+                <option value={category.id}>{category.name}</option> ) // value= <--- mis väärtus läheb ref sisse
+            }
+        </Form.Select>
         <Form.Label>Pildi URL</Form.Label> <br />
         <Form.Control placeholder="Pildi URL aadress" ref={imgSrcRef} /> <br />
         <Form.Label>Kirjeldus</Form.Label> <br />

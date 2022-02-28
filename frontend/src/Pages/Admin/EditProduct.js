@@ -22,7 +22,7 @@ function EditProduct() {
     // const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(()=>{
-        fetch("http://localhost:8080/products/" + id)
+        fetch("https://mihkeljava.herokuapp.com/products/" + id)
         .then(res => {
             if (res.status === 200) {
                 return res.json();
@@ -43,7 +43,7 @@ function EditProduct() {
             quantity: quantityRef.current.value,
             active: activeRef.current.value
         }
-        fetch("http://localhost:8080/products/" + product.id,{
+        fetch("https://mihkeljava.herokuapp.com/products/" + product.id,{
             method: "PUT",
             body: JSON.stringify(newProduct),
             headers: {
@@ -58,7 +58,7 @@ function EditProduct() {
             <div>  
                 <div>{product.name}</div>
                 <div>{product.price}</div>
-                <div>{product.category}</div>
+                <div>{product.category.name}</div>
             </div>
             <br /><br />
             <div>

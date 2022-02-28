@@ -51,7 +51,7 @@ function Cart() {
     }
 
     function onPay() {
-        fetch("http://localhost:8080/payment",
+        fetch("https://mihkeljava.herokuapp.com/payment",
             { 
                 method: "POST", 
                 body: JSON.stringify(cartProducts),

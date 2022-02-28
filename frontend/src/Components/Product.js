@@ -33,7 +33,7 @@ function Product(props) {
         <Link to={"toode/" + props.prod.id}>
             <div>{props.prod.name}</div>
             <div>{props.prod.price}</div>
-            <div>{props.prod.category}</div>
+            <div>{props.prod.category.name}</div>
         </Link>
         <Button onClick={() => onAddToCart(props.prod)}>{t("home.add-cart-button")}</Button>
     </div>)

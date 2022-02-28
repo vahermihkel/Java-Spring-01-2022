@@ -37,7 +37,6 @@ public class Product {
     @NotNull
     private boolean active;
 
-    @NotBlank
     @OneToOne
     private Category category;
 

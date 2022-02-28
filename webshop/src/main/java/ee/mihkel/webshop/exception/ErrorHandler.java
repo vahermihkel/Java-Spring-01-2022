@@ -36,14 +36,14 @@ public class ErrorHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler()
-    public ResponseEntity<ErrorResponse> handleException(DataIntegrityViolationException e) {
-        ErrorResponse response = new ErrorResponse();
-        response.setMessage("Mitteunikaalne ribakood");
-        response.setTimeStamp(new Date());
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler()
+//    public ResponseEntity<ErrorResponse> handleException(DataIntegrityViolationException e) {
+//        ErrorResponse response = new ErrorResponse();
+//        response.setMessage("Mitteunikaalne ribakood");
+//        response.setTimeStamp(new Date());
+//        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler()
     public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException e) {

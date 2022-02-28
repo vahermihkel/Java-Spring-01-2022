@@ -15,7 +15,7 @@ function ViewProducts() {
     const searchRef = useRef();
     
     useEffect(() => {
-        fetch("http://localhost:8080/products")
+        fetch("https://mihkeljava.herokuapp.com/products")
         .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
         .then(data => {
             updateProducts(data)
@@ -35,7 +35,7 @@ function ViewProducts() {
     }
 
     function onDeleteProduct(product) {
-        fetch("http://localhost:8080/products/" + product.id, {
+        fetch("https://mihkeljava.herokuapp.com/products/" + product.id, {
             method: "DELETE"
         })
         .then(res => res.json()) 
@@ -46,7 +46,7 @@ function ViewProducts() {
     }
 
     function onIncreaseQuantity(product) {
-        fetch("http://localhost:8080/increase-quantity",{
+        fetch("https://mihkeljava.herokuapp.com/increase-quantity",{
             method: "PATCH",
             body: JSON.stringify(product),
             headers: {
@@ -54,7 +54,7 @@ function ViewProducts() {
             }
         }).then(res=> {
             if (res.status === 200) {
-                fetch("http://localhost:8080/products")
+                fetch("https://mihkeljava.herokuapp.com/products")
                 .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
                 .then(data => {
                     updateProducts(data)
@@ -80,7 +80,7 @@ function ViewProducts() {
 
     function onDecreaseQuantity(product) {
         if (product.quantity > 0) {
-            fetch("http://localhost:8080/decrease-quantity",{
+            fetch("https://mihkeljava.herokuapp.com/decrease-quantity",{
                 method: "PATCH",
                 body: JSON.stringify(product),
                 headers: {
@@ -88,7 +88,7 @@ function ViewProducts() {
                 }
             }).then(res=> {
                 if (res.status === 200) {
-                    fetch("http://localhost:8080/products")
+                    fetch("https://mihkeljava.herokuapp.com/products")
                     .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
                     .then(data => {
                         updateProducts(data)
@@ -117,7 +117,7 @@ function ViewProducts() {
       <td>{product.name}</td>
       <td>{product.price}</td>
       <td>{product.quantity}</td>
-      <td>{product.category}</td>
+      <td>{product.category.name}</td>
       <td>
           <Button onClick={() => onDeleteProduct(product)} variant="danger">X</Button>
           <Link to={"/admin/muuda/" + product.id}>
