@@ -1,6 +1,7 @@
 package ee.mihkel.webshop.service;
 
 import ee.mihkel.webshop.model.entity.Order;
+import ee.mihkel.webshop.model.entity.Person;
 import ee.mihkel.webshop.model.entity.Product;
 import ee.mihkel.webshop.model.request.input.CartProduct;
 import ee.mihkel.webshop.model.request.input.EveryPayCheckResponse;
@@ -10,6 +11,7 @@ import ee.mihkel.webshop.model.request.output.EveryPayData;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
 import ee.mihkel.webshop.model.request.output.EveryPayPaymentCheck;
 import ee.mihkel.webshop.repository.OrderRepository;
+import ee.mihkel.webshop.repository.PersonRepository;
 import ee.mihkel.webshop.repository.ProductRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class PaymentService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    PersonRepository personRepository;
+
     //        List<Product> productsFromDb = new ArrayList<>();
 //        for (Product p: products) {
 //            Product productFound = productRepository.findById(p.getId()).get();
@@ -79,11 +84,13 @@ public class PaymentService {
                 .sum();
     }
 
-    public Long saveOrderToDb(double orderSum, List<Product> products) {
+    public Long saveOrderToDb(double orderSum, List<Product> products, String personCode) {
         Order order = new Order();
         order.setTimeStamp(new Date());
         order.setSum(orderSum);
         order.setOrderProducts(products);
+        Person person = personRepository.findById(personCode).get();
+        order.setPerson(person);
 
         Order updatedOrder = orderRepository.save(order);
         return updatedOrder.getId();

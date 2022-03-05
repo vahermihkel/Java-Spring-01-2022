@@ -8,27 +8,26 @@ import ee.mihkel.webshop.service.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Log4j2
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class PaymentController {
 
     @Autowired
     PaymentService paymentService;
 
-    @PostMapping("payment")
-    public ResponseEntity<EveryPayLink> getPaymentLink(@RequestBody List<CartProduct> products) {
+    @PostMapping("payment/{personCode}")
+    public ResponseEntity<EveryPayLink> getPaymentLink(
+                        @RequestBody List<CartProduct> products,
+                        @PathVariable String personCode) {
 
         List<Product> productsFromDb = paymentService.getProductsFromDb(products);
         double orderSum = paymentService.getOrderSum(productsFromDb);
 
-        Long orderId = paymentService.saveOrderToDb(orderSum,productsFromDb);
+        Long orderId = paymentService.saveOrderToDb(orderSum,productsFromDb, personCode);
 
         return ResponseEntity.ok()
                 .body(paymentService.getPaymentLinkFromEveryPay(orderSum,orderId));

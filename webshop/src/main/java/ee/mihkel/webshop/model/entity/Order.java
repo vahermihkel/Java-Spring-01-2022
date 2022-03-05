@@ -23,7 +23,8 @@ public class Order {
     private Date timeStamp;
     private double sum;
     private boolean paid;
-    // Person
+    @OneToOne
+    private Person person;
 
     @ManyToMany
     private List<Product> orderProducts;

@@ -20,7 +20,6 @@ import java.util.Optional;
 @RestController
 @Log4j2
 //@RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     @Autowired
