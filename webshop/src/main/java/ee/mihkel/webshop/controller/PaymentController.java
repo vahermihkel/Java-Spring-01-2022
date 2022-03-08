@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @RestController
@@ -22,7 +23,7 @@ public class PaymentController {
     @PostMapping("payment/{personCode}")
     public ResponseEntity<EveryPayLink> getPaymentLink(
                         @RequestBody List<CartProduct> products,
-                        @PathVariable String personCode) {
+                        @PathVariable String personCode) throws ExecutionException {
 
         List<Product> productsFromDb = paymentService.getProductsFromDb(products);
         double orderSum = paymentService.getOrderSum(productsFromDb);

@@ -1,5 +1,6 @@
 package ee.mihkel.webshop.service;
 
+import ee.mihkel.webshop.cache.ProductCache;
 import ee.mihkel.webshop.model.entity.Order;
 import ee.mihkel.webshop.model.entity.Person;
 import ee.mihkel.webshop.model.entity.Product;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -59,6 +61,9 @@ public class PaymentService {
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    ProductCache productCache;
+
     //        List<Product> productsFromDb = new ArrayList<>();
 //        for (Product p: products) {
 //            Product productFound = productRepository.findById(p.getId()).get();
@@ -70,12 +75,15 @@ public class PaymentService {
     // .map() --> // [Product{price: 2.0}, Product{price: 3.0}]
 
 
-    public List<Product> getProductsFromDb(List<CartProduct> products) {
-        log.info(products.get(0).getCartProduct().getId());
-        return products.stream() // avab streami
-                .map(e -> productRepository.findById(e.getCartProduct().getId()).get()) // muutmine - map() abil
-                .collect(Collectors.toList()); // iga Stream peab omama lõpptulemist (tagastab Listi, summeerimise, average, true/false)
-
+    public List<Product> getProductsFromDb(List<CartProduct> products) throws ExecutionException {
+//        log.info(products.get(0).getCartProduct().getId());
+//        return products.stream() // avab streami
+//                .map(e -> productRepository.findById(e.getCartProduct().getId()).get()) // muutmine - map() abil
+//                .collect(Collectors.toList()); // iga Stream peab omama lõpptulemist (tagastab Listi, summeerimise, average, true/false)
+            List<Long> ids = products.stream()    // stream avab listi, et seda efektiivselt manipuleerida
+                    .map(e -> e.getCartProduct().getId()) // võtab iga elemendi ja asendab selle parempoolse osaga
+                    .collect(Collectors.toList()); // pannakse Stream kinni --- listiks, kogusumma, boolean
+            return productCache.getProducts(ids);
     }
 
     public double getOrderSum(List<Product> products) {

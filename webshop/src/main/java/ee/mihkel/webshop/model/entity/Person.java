@@ -20,6 +20,7 @@ public class Person {
     @Column(unique = true)
     private String email;
     private String phone;
+    private String password;
 
     // Repository
     // Controller, kus saab lisada, muuta, kustutada, kõiki võtta

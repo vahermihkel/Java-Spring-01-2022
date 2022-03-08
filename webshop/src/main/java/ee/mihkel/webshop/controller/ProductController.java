@@ -1,5 +1,6 @@
 package ee.mihkel.webshop.controller;
 
+import ee.mihkel.webshop.cache.ProductCache;
 import ee.mihkel.webshop.model.entity.Product;
 import ee.mihkel.webshop.repository.ProductRepository;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 // sõnade otsimiseks:  ctrl + shift + f
 // failide otsimiseks: shift + shift - 2x shift
@@ -25,6 +27,9 @@ public class ProductController {
     @Autowired
     ProductRepository productRepository;
     // ProductRepository productRepository = new ProductRepository();
+
+    @Autowired
+    ProductCache productCache;
 
     @GetMapping("products")
     public ResponseEntity<List<Product>> getProducts() {
@@ -83,9 +88,9 @@ public class ProductController {
     //            product = productRepository.findById(id).get();
     //        }
     @GetMapping("products/{id}")
-    public ResponseEntity<Product> viewProduct(@PathVariable Long id) {
+    public ResponseEntity<Product> viewProduct(@PathVariable Long id) throws ExecutionException {
         return ResponseEntity.ok()
-                .body(productRepository.findById(id).get());
+                .body(productCache.getProduct(id));
     }
 
     @PutMapping("products")
