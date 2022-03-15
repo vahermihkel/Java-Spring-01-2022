@@ -26,12 +26,6 @@ public class PersonController {
         return person;
     }
 
-    @PostMapping("person")
-    public String addPerson(@RequestBody Person person) {
-        personRepository.save(person);
-        return "New person added> " + person.getFirstName() + " " + person.getLastName();
-    }
-
     @DeleteMapping("person/{personCode}")
     public List<Person> deletePerson(@PathVariable String personCode) {
         personRepository.deleteById(personCode);
