@@ -20,7 +20,13 @@ function AddProduct() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        fetch("http://mihkeljava.herokuapp.com/categories")
+        fetch("http://mihkeljava.herokuapp.com/categories",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + sessionStorage.getItem("token")
+            }
+        })
         .then(res => res.json()) // {type: 'cors', url: 'http://localhost:8080/products', redirected: false, status: 200, ok: true, …}
         .then(body => {
             setCategories(body);
@@ -43,7 +49,8 @@ function AddProduct() {
             method: "POST",
             body: JSON.stringify(newProduct),
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type":"application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem("token")
             }
         }).then(res => {
             console.log(res);

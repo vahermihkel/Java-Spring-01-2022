@@ -28,7 +28,6 @@ public class TokeniEhitaja {
                 .setSubject(email) // kui see ka, siis on erinevatel emailidega sisseloginutel erinev,
                 // aga ühel ja samal inimesel kes logib sama emailiga, tal on sama
                 .setExpiration(newDate) // igaüks unikaalne
-                .setId(secret)
                 .compact(); // ehitatakse valmis
         authData.setToken(token);
 

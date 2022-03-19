@@ -77,6 +77,13 @@
             <artifactId>guava</artifactId>
             <version>31.0.1-jre</version>
         </dependency>
+<!-- 1. Security - Dependency
+  KÕIK API otsad blokitud
+  brauseris sisselogimine
+  kasutajanimi: user
+  parool: a8066829-0177-429c-801d-dea086fbc013 - iga kord erinev
+  Using generated security password:
+  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

@@ -26,4 +26,10 @@ public class Category {
     @NotNull
     @NotBlank
     private String name;
+
+    private IsActive isActive;
+}
+
+enum IsActive {
+    POSITIIVNE,SADAD,AEQE
 }

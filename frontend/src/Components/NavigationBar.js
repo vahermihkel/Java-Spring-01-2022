@@ -38,6 +38,9 @@ function NavigationBar() {
             <Nav className="me-auto">
                 <Nav.Link as={Link} to="/admin">{t("navbar.admin-link")}</Nav.Link>
             </Nav>
+            <Nav className="me-auto">
+                <Nav.Link as={Link} to="/logi-sisse">Logi sisse</Nav.Link>
+            </Nav>
             <Nav.Link onClick={() => changeLanguage('EE')}>
                 <img className="flag" alt="" src="/language-flags/estonia.png" />
             </Nav.Link>

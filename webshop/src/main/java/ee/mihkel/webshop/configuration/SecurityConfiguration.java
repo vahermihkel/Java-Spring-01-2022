@@ -7,12 +7,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+// @Configuration faili
+//   class     extends WebSecurityConfigurerAdapter
+
+// configure() <---- ligipääseda
+// HttpSecurity <---
+// http.   <--- niimoodi kirjutan üle vana loogikat ENDA loogikaga
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${jwt.secret}")
     String secret;
 
+    // KÕIK PÄRINGUD käivad läbi configure
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

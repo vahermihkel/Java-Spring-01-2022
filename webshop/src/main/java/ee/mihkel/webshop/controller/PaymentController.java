@@ -2,12 +2,15 @@ package ee.mihkel.webshop.controller;
 
 import ee.mihkel.webshop.model.entity.Product;
 import ee.mihkel.webshop.model.request.input.CartProduct;
+import ee.mihkel.webshop.model.request.input.PaymentState;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
 import ee.mihkel.webshop.model.request.output.EveryPayPaymentCheck;
+import ee.mihkel.webshop.repository.PersonRepository;
 import ee.mihkel.webshop.service.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +23,15 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @PostMapping("payment/{personCode}")
+    @Autowired
+    PersonRepository personRepository;
+
+    @PostMapping("payment")
     public ResponseEntity<EveryPayLink> getPaymentLink(
-                        @RequestBody List<CartProduct> products,
-                        @PathVariable String personCode) throws ExecutionException {
+                        @RequestBody List<CartProduct> products) throws ExecutionException {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        String personCode = personRepository.getPersonByEmail(email).getPersonCode();
 
         List<Product> productsFromDb = paymentService.getProductsFromDb(products);
         double orderSum = paymentService.getOrderSum(productsFromDb);
@@ -35,11 +43,11 @@ public class PaymentController {
     }
 
     @PostMapping("check-payment")               //{order_reference: 120051, payment_reference: 312ads}
-    public ResponseEntity<Boolean> checkPayment(@RequestBody EveryPayPaymentCheck everyPayPaymentCheck) {
-        Boolean isPaid = paymentService.checkIfOrderPaid(everyPayPaymentCheck);
+    public ResponseEntity<PaymentState> checkPayment(@RequestBody EveryPayPaymentCheck everyPayPaymentCheck) {
+        PaymentState paymentState = paymentService.checkIfOrderPaid(everyPayPaymentCheck);
 
         return ResponseEntity.ok()
-                .body(isPaid);
+                .body(paymentState);
     }
 
     // Bean abil funktsiooni

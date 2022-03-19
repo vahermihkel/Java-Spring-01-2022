@@ -146,7 +146,7 @@ public class PaymentService {
         return everyPayData;
     }
 
-    public Boolean checkIfOrderPaid(EveryPayPaymentCheck everyPayPaymentCheck) {
+    public PaymentState checkIfOrderPaid(EveryPayPaymentCheck everyPayPaymentCheck) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authorization);
         HttpEntity<EveryPayData> httpEntity = new HttpEntity<>(headers);
@@ -156,15 +156,19 @@ public class PaymentService {
                         HttpMethod.GET,httpEntity, EveryPayCheckResponse.class);
         if (response.getBody() != null) {
             PaymentState paymentState = response.getBody().getPayment_state();
+            Order order = orderRepository.getById(everyPayPaymentCheck.getOrder_reference());
             if (paymentState == PaymentState.failed ||
                     paymentState == PaymentState.abandoned ||
                     paymentState == PaymentState.voided) {
-                return false;
+                order.setPaid(false);
             } else if (paymentState == PaymentState.settled) {
-                return true;
+                order.setPaid(true);
             }
+//            order.setPaid(paymentState);
+            orderRepository.save(order);
+            return paymentState;
         }
-        return false;
+        return null;
     }
 
     // mapToDouble

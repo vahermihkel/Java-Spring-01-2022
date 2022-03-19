@@ -15,7 +15,8 @@ import EditProduct from './Pages/Admin/EditProduct';
 import ViewProducts from './Pages/Admin/ViewProducts';
 import NotFound from './Pages/NotFound';
 import AdminNotFound from './Pages/Admin/AdminNotFound';
-
+import Login from './Pages/Login';
+import Order from './Pages/Order';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/ostukorv" exact element={<Cart />} />
+        <Route path="/tellimus" exact element={<Order />} />
+        <Route path="/logi-sisse" exact element={<Login />} />
         <Route path="/toode/:id" exact element={<SingleProduct />} />
         <Route path="/admin" exact >
           <Route path="/admin" exact element={<AdminHome />} />

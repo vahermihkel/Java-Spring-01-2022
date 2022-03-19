@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -41,18 +43,31 @@ public class SisselogimiseFilter extends BasicAuthenticationFilter {
             log.info("Token sobib");
 
             log.info(secret);
+            token = token.replace("Bearer ","");
 
+            // Claims == tokeni mudel
+            // id, expiration, subject, jnejne
             Claims claims = Jwts.parser()
                     .setSigningKey(secret.getBytes())
-                    .parseClaimsJws(token.replace("Bearer ",""))
+                    .parseClaimsJws(token)
                     .getBody();
 
-            String id = claims.getId();
             String email = claims.getSubject();
+            log.info(email);
 
-            if (id.equals(secret)) {
-                log.info("token secret on korrektne");
-            }
+
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    email,
+                    null,
+                    null);
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            // localhost:8080/payment <-- isikukood + tooted
+            // localhost:8080/payment --- token - email
+            // Controllerisse
+            // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         }
 
         super.doFilterInternal(request, response, chain);

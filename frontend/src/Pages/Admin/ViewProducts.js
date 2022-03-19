@@ -50,7 +50,8 @@ function ViewProducts() {
             method: "PATCH",
             body: JSON.stringify(product),
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type":"application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem("token")
             }
         }).then(res=> {
             if (res.status === 200) {
@@ -84,7 +85,8 @@ function ViewProducts() {
                 method: "PATCH",
                 body: JSON.stringify(product),
                 headers: {
-                    "Content-Type":"application/json"
+                    "Content-Type":"application/json",
+                    "Authorization": "Bearer " + sessionStorage.getItem("token")
                 }
             }).then(res=> {
                 if (res.status === 200) {
