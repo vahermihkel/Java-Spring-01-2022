@@ -6,7 +6,7 @@ import ee.mihkel.webshop.model.request.input.PaymentState;
 import ee.mihkel.webshop.model.request.output.EveryPayLink;
 import ee.mihkel.webshop.model.request.output.EveryPayPaymentCheck;
 import ee.mihkel.webshop.repository.PersonRepository;
-import ee.mihkel.webshop.service.PaymentService;
+import ee.mihkel.webshop.service.PaymentServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class PaymentController {
 
     @Autowired
-    PaymentService paymentService;
+    PaymentServiceImpl paymentService;
 
     @Autowired
     PersonRepository personRepository;

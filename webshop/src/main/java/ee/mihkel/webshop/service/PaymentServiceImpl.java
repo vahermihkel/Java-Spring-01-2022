@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class PaymentService {
+public class PaymentServiceImpl implements PaymentServiceInterface {
 
     @Value("${everypay.url}")
     private String everyPayUrl;
